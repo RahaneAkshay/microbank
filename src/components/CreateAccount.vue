@@ -1,8 +1,8 @@
+
 <template>
   <div class="container-fluid">
     <div class="row">
       <div class="col-6">
-        {{ checkForm }}
         <form>
           <div class="mb-3">
             <label for="fullName" class="form-label">Full Name</label>
@@ -10,7 +10,7 @@
               type="text"
               class="form-control"
               id="fullName"
-              v-model="userDetails.fullName"
+              v-model="userFormGroup.props.fullName"
             />
           </div>
           <div class="mb-3">
@@ -19,25 +19,25 @@
               type="date"
               class="form-control"
               id="DOI"
-              v-model="userDetails.DOI"
+              v-model="userFormGroup.props.dateOfIncorporation"
             />
           </div>
           <div class="mb-3">
             <label for="email" class="form-label">Email</label>
             <input
-              type="text"
+              type="email"
               class="form-control"
               id="email"
-              v-model="userDetails.email"
+              v-model="userFormGroup.props.email"
             />
           </div>
           <div class="mb-3">
             <label for="Password" class="form-label">Password</label>
             <input
-              type="text"
+              type="password"
               class="form-control"
               id="Password"
-              v-model="userDetails.Password"
+              v-model="userFormGroup.props.password"
             />
           </div>
           <div class="mb-3">
@@ -45,16 +45,17 @@
               >Confirm Password</label
             >
             <input
-              type="text"
+              type="password"
               class="form-control"
               id="confirmPassword"
-              v-model="userDetails.confirmPassword"
+              v-model="userFormGroup.props.confirmPassword"
             />
           </div>
           <button
             type="button"
             class="btn btn-outline-warning"
             @click="getFormData()"
+            :disabled="!userFormGroup.valid"
           >
             Create an account
           </button>
@@ -64,36 +65,30 @@
   </div>
 </template>
 <script lang="ts">
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Component, Vue } from "vue-property-decorator";
-
+import { required, RxFormBuilder, IFormGroup } from "@rxweb/reactive-forms";
+import { User } from "../model/user.model";
+import { namespace } from 'vuex-class'
+const user = namespace('User')
 @Component
 export default class CreateAccount extends Vue {
-  userDetails = {
-    fullName: "",
-    DOI: null,
-    email: "",
-    Password: "",
-    confirmPassword: "",
-  };
-  getFormData(): void {
-    console.log(this.checkForm());
+  userFormGroup: IFormGroup<User>;
+  formBuilder: RxFormBuilder = new RxFormBuilder();
+  constructor() {
+    super();
+    this.userFormGroup = this.formBuilder.formGroup(User) as IFormGroup<User>;
   }
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  checkForm(): boolean {
-    if (
-      this.userDetails.fullName &&
-      this.userDetails.DOI &&
-      this.userDetails.email &&
-      this.userDetails.Password &&
-      this.userDetails.confirmPassword
-    ) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-  validateFormData(): void {
-    console.log();
+ 
+  @user.State
+  public users!:Array<any>
+
+   @user.Getter
+  public getAllUsers!: Array<any>
+  getFormData() {
+    console.log(this.userFormGroup.props);
+    console.log(this.getAllUsers);
   }
 }
 </script>

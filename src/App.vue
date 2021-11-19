@@ -8,6 +8,8 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import CreateAccount from './components/CreateAccount.vue'
+import { ReactiveFormConfig, ClientLibrary } from "@rxweb/reactive-forms";
+
 @Component({
   components: {
     
@@ -15,6 +17,14 @@ import CreateAccount from './components/CreateAccount.vue'
   },
 })
 export default class App extends Vue {}
+ReactiveFormConfig.clientLib = ClientLibrary.Vue;
+ReactiveFormConfig.set({
+  validationMessage: {
+    required: "This Field is required",
+    alpha: "Only Alpha Numerics are allowed.",
+    minLength: "Minimum {{1}} characters you have to enter."
+  }
+});
 </script>
 
 <style>

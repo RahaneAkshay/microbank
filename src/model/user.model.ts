@@ -3,7 +3,7 @@ import { required, minLength } from "@rxweb/reactive-forms";
 
 export class User {
   private _fullName: string = "";
-   private _dateOfIncorporation!:Date
+   private _dateOfIncorporation!:any
    private _email!:string
    private _password!:string
    private _confirmPassword!:string
